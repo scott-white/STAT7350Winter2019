@@ -1,0 +1,189 @@
+---
+title: "Lesson 1"
+author: "Scott White"
+date: "March 6, 2019"
+output: pdf_document
+---
+
+#Loading data and packages
+
+```{r}
+library(tidyverse)
+library(gridExtra)
+
+#download.file(url="https://ndownloader.figshare.com/files/2292169", destfile = "data/portal_data_joined.csv")
+
+surveys <- read_csv("../data/portal_data_joined.csv")
+print(surveys)
+```
+
+# Tidying up the data
+
+## Removing missing data
+Cleaning the data is done by removing observations where the weight or hindfoot length are missing, or the sex has not been determined.
+
+```{r}
+surveys_complete = surveys %>%
+  filter(!is.na(weight),
+         !is.na(hindfoot_length),
+         !is.na(sex))
+```
+
+### Challenge questions
+How many observations were removed above?
+```{r}
+nrow(surveys) - nrow(surveys_complete)
+```
+
+##Removing rare bird species
+We remove bird species that have been observed less than 50 times.
+
+```{r}
+species_counts = surveys_complete %>% 
+  count(species_id) %>% 
+  filter(n >= 50)
+
+surveys_cleaned = surveys_complete %>% 
+  filter(species_id %in% species_counts$species_id)
+```
+
+### Saving the cleaned data
+```{r}
+write_csv(surveys_cleaned, path = "../data_output/surveys_cleaned.csv")
+```
+
+# Plotting with \texttt{ggplot2}
+```{r}
+p = surveys_cleaned %>% 
+  ggplot(aes(x = weight, y = hindfoot_length))
+
+p + geom_point()
+```
+
+
+```{r}
+p + geom_point(alpha = 1/2, size = 2, aes(color = genus))
+```
+
+### Challenge
+log10 transform the weight
+
+```{r}
+p + geom_point(alpha = 1/2, size = 2, aes(color = genus)) +
+  scale_x_log10()
+```
+
+## Adding fitted curves
+
+```{r}
+p + geom_point(alpha = 1/2, size = 2, aes(color = genus)) +
+  geom_smooth()
+```
+
+## Faceting on variables
+
+```{r}
+p + geom_point(alpha = 1/2, size = 2, aes(color = genus)) +
+  facet_wrap(~ genus)
+```
+
+### Faceting on one variable
+
+```{r}
+Dp = "Dipodomys"
+surveys_cleaned %>% 
+  filter(genus == Dp) %>% 
+  ggplot(aes(x = weight, y = hindfoot_length)) +
+  geom_point(aes(color = species)) +
+  labs(title = Dp)
+```
+
+## Boxplots
+
+```{r}
+surveys_cleaned %>% 
+  ggplot(aes(x = species_id, y = weight)) +
+  geom_boxplot()
+```
+
+```{r}
+surveys_cleaned %>% 
+  ggplot(aes(x = species_id, y = weight)) +
+  geom_jitter(alpha = 0.3, color = "tomato") +
+  geom_boxplot(alpha = 0.0) 
+```
+
+
+### Challenge
+
+```{r}
+surveys_cleaned %>% 
+  ggplot(aes(x = reorder(species_id, weight), y = weight)) +
+  geom_jitter(alpha = 0.3, color = "tomato") +
+  geom_violin(alpha = 0.7) 
+```
+
+
+```{r}
+surveys_cleaned %>% 
+  ggplot(aes(x = species_id, y = hindfoot_length)) +
+  geom_jitter(alpha = 0.3, aes(color = plot_id)) +
+  geom_boxplot(alpha = 0.0) 
+```
+
+## Time series plots
+
+```{r}
+yearly_counts = surveys_cleaned %>% 
+  count(year, species_id)
+
+yearly_sex_counts <- surveys_cleaned %>%
+  count(year, species_id, sex)
+```
+
+```{r}
+yearly_counts %>% 
+  ggplot(aes(year, n)) +
+  geom_line()
+```
+
+```{r}
+yearly_counts %>% 
+  ggplot(aes(year, n, group = species_id)) +
+  geom_line()
+```
+
+```{r}
+yearly_counts %>% 
+  ggplot(aes(year, n, colour = species_id)) +
+  geom_line()
+```
+
+```{r}
+yearly_sex_counts %>% 
+  ggplot(aes(x = year, y = n, colour = sex)) +
+  geom_line() +
+  facet_wrap(~ species_id)
+```
+
+```{r}
+yearly_sex_counts %>% 
+  ggplot(aes(x = year, y = n, colour = sex)) +
+  geom_line() +
+  facet_wrap(~ reorder(species_id, n))
+```
+
+### Challenge
+
+```{r}
+surveys_cleaned %>% 
+  group_by(year, species_id) %>% 
+  summarise(avg_weight = mean(weight)) %>% 
+  select(year, species_id, avg_weight, species_id) %>% 
+  ggplot(aes(x = year, y = avg_weight)) +
+  geom_line() +
+  facet_wrap(~ species_id) +
+  theme_bw()
+```
+
+
