@@ -1,0 +1,80 @@
+\documentclass[12pt]{article}
+
+\title{Improving Student Performance in Introductory Statistics Courses Using Written Assignments}
+\author{Scott White}
+
+
+\usepackage{amsmath}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+The idea came to me through helping out in the stats computing lab. Students often ask for help understanding concepts. Often times when I ask them which part of the concept they're having trouble understanding a typical response is "I don't know. I don't get understand what's going on", or something to that effect. Though, after talking with them for even just a minute, they start to click on some of the ideas. One theory behind why this occurs is that when students are trying to understand a concept they usually reread notes, or try to do sample problems, or redo problems that were done in class. One learning strategy that I have never come across a student telling me they tried is writing about the topic. Writing has been introduced in some statistics courses under the framework of Writing Across the Curriculum (WAC) \cite{BIB:1} with great effect.
+
+
+\section{Motivation}
+
+The aim of this study is to see if introducing writing assignments that are marked by lab instructors have a positive effect on student performance. This would allow the use of writing assignments in courses that typically have several hundred students, which generally favour assignments that are calculation based.
+
+The hypothesis can then be stated as: Do students who have an assignment with a writing component that is marked by a teaching assistant (TA) perform better?
+
+\section{Methodology}
+
+An introductory statistics course with two hundred students will be split into four lab sections of fifty students each. All four sections will have assignments with calculation based questions, but two of the sections will also have questions that ask students to write short apragraphs explaining concepts taught in class, or asking students how a concept might be applied in a real world context. Examples of such questions could be:
+
+\begin{itemize}
+  \item Explain in your own words what the central limit theorem is.
+  \item Explain in your own words the difference between type I and type II error, and illustrate it with an example.
+\end{itemize}
+
+
+
+
+The students in the section with the written component will be assigned to the writing group W, and the other students to the non-writing group NW.
+
+Given that this study must be completed in a month. The assignments will be administered weekly after the first midterm, and so the course will be designed such that the second midterm occurs five weeks after the second midterm.
+
+After the second midterm has been completed by the students, the difference between the first midterm and the second will be computed.
+
+\section{Data Analysis}
+
+\subsection{Data storage}
+
+The data will be recorded in a comma seperated values (csv) format with the column headings: Student ID, Group, Midterm 1 Grade, Midterm 2 Grade, and Difference.
+
+\subsection{Statistical procedure}
+
+The difference between the two midterms will be calculated as
+
+$$d_{i, g} = \text{Midterm 2 Grade} - \text{Midterm 1 Grade}$$
+
+where $g \in \{\text{W}, \text{NW}\}$ is the group that student $i$ belongs to. This would give two samples of difference values that could then be compared with a $t$-test where $\bar{d}_{W}$ is the average difference in the writing group and $\bar{d}_{NW}$ is the average difference in the non-writing group, resulting in the test statistic
+
+$$t = \frac{ \bar{d_{W}} - \bar{d_{NW}}  }{\text{SD}(\bar{d_{W}} - \bar{d_{NW}})}, \quad d.f. = \max\{n_W - 1, n_{NW} - 1\}$$
+
+where
+
+$$\text{SD}(\bar{d_{W}} - \bar{d_{NW}}) = \sqrt{  \frac{s^2_W}{n_W} + \frac{s^2_{NW}}{n_{NW}}  }$$
+
+and the nulll hypothesis is there is no difference between the mean difference in the non-writing group and the writing group, with the alternative hypothesis being the mean difference in the writing group is greter than the mean difference in the non-writing group. The test will be performed at a 5\% level ofsignificance.
+
+\section{Budget}
+
+Assuming an hourly wage of \$20 per hour for the TAs grading the homework on the four sections, the only additional expense would be the extra time required of the TAs to mark the written assignments. Assuming both writing sections were at capacity, there would be 100 written assignments to mark. Assuming an average of 5 minutes to read and critique each assignment, this would be an extra 500 minutes or 8.33 hours to mark the written assignments. Thus
+
+
+\begin{equation*}
+\begin{split}
+\text{Additional cost} &= \text{Wage} \times \text{Hours per week} \times \text{Number of weeks}\\
+&= \$20 \times 8.33 \times 4\\
+&= \$666.40
+\end{split}
+\end{equation*}
+
+\bibliography{bibliography} 
+\bibliographystyle{ieeetr}
+
+\end{document}
