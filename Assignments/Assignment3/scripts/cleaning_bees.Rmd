@@ -23,7 +23,7 @@ library(here)
 
 # write_csv(bees, here(""))
 
-bees <- read_csv("../data/bees.csv")
+bees <- read_csv(here("Assignments", "Assignment3", "data/bees.csv"))
 # bees <- read_csv(here(""))
 ```
 
@@ -38,6 +38,13 @@ bees <- bees %>% replace_with_na_all(condition = ~.x == "N/A")
 
 apply(bees, 2, function(x) mean(is.na(x)))
 ```
+
+Check how many unique elements there are in each column
+
+```{r}
+apply(bees, 2, function(x) length(unique(x)))
+```
+
 
 The columns from X14 to X20 contain only missing values, so we can remove them. The notes column also seems to repeat information from the County column, and the coordinates column doesn't give much information either.
 

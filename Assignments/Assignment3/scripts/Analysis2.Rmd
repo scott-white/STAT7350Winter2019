@@ -28,12 +28,10 @@ bees <- bees %>% mutate(State = fct_relevel(State, levels = c("Wisconsin", "Illi
 bees
 ```
 
-# Stron/Week states
-
 ```{r}
-strong_states <- c("Iowa", "Minnesota", "Missouri")
-weak_states <- c("Illinois", "Wisconsin")
+apply(bees, 2, function(x) length(unique(x)))
 ```
+
 
 
 ```{r}
@@ -49,7 +47,7 @@ genus_counts <- bees %>% group_by(Genus) %>% summarise(Count = n()) %>%
         plot.title = element_text(size = 20))
 genus_counts
 
-ggsave("genus_counts.png", genus_counts)
+# ggsave("genus_counts.png", genus_counts)
 ```
 
 ```{r}
@@ -112,7 +110,7 @@ genus_state_month_barplot <- genus_state_month %>%
         axis.text = element_text(size = 14))
 genus_state_month_barplot
 
-ggsave("genus_state_month_barplot.png", plot = genus_state_month_barplot)
+# ggsave("genus_state_month_barplot.png", plot = genus_state_month_barplot)
 
 # ggsave("genus_state_month_barplot.png", plot = genus_state_month_barplot,
 #        path = here("Assignments", "Assignment3", "figures/genus_state_month_barplot.png"))
@@ -135,7 +133,7 @@ genus_state_month_mosaicplot <-genus_state_month %>%
         axis.text = element_text(size = 14))
 genus_state_month_mosaicplot
 
-ggsave("genus_state_month_mosaicplot.png", plot = genus_state_month_mosaicplot)
+# ggsave("genus_state_month_mosaicplot.png", plot = genus_state_month_mosaicplot)
 ```
 
 
@@ -178,7 +176,7 @@ species_state_month_bargraph <- species_state_month %>%
         axis.text = element_text(size = 14))
 species_state_month_bargraph
 
-ggsave("species_state_month_bargraph.png", species_state_month_bargraph)
+# ggsave("species_state_month_bargraph.png", species_state_month_bargraph)
 ```
 
 ```{r}
@@ -195,7 +193,7 @@ species_state_month_mosaicplot <- species_state_month %>%
         axis.text = element_text(size = 14))
 species_state_month_mosaicplot
 
-ggsave("species_state_month_mosaicplot.png", species_state_month_mosaicplot)
+# ggsave("species_state_month_mosaicplot.png", species_state_month_mosaicplot)
 ```
 
 ```{r}
@@ -232,14 +230,16 @@ state_month_genus_count <- bees %>% group_by(State, Month, Genus) %>% summarise(
 state_month_genus_count_facetplot <- state_month_genus_count %>% drop_na %>% filter(Genus %in% top10_genus) %>% 
   ggplot(aes(Month, Count)) +
   geom_col(fill = "#0099FF") +
-  facet_grid(State~Genus) +
+  ggtitle("Diversity of top ten genus by state",
+          "From May to September")+
+  facet_grid(State~reorder(Genus, Count)) +
   theme(axis.title = element_text(size = 16),
         plot.title = element_text(size = 20),
         axis.text = element_text(size = 14),
         axis.text.x = element_text(angle = 90))
 state_month_genus_count_facetplot
 
-ggsave("state_month_genus_count_facetplot.png", state_month_genus_count_facetplot, height = 8, width = 12)
+ggsave("state_month_genus_count_facetplot.png", state_month_genus_count_facetplot, height = 8, width = 14)
 ```
 
 ```{r}
