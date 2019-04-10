@@ -185,11 +185,6 @@ fig_state_species_month_strong <- state_month_genus_species %>% filter(Species %
   
 
 fig_state_species_month_strong
-  
-ggsave(filename = "fig_state_species_month_strong.jpeg",
-       plot = fig_state_species_month_strong,
-       path = here("Assignments", "Assignment3", "figures", "fig_state_species_month_strong.jpeg"),
-       dpi = 300)
 ```
 
 

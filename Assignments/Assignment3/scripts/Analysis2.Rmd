@@ -64,33 +64,9 @@ bees %>% group_by(State, Month, Genus) %>% summarise(Count = n()) %>% drop_na() 
 ```
 
 
-```{r}
-bees %>% group_by(Genus, State) %>% summarise(Count = n()) %>%
-  ggplot(aes(reorder(Genus, Count, FUN = sum), Count, fill = State)) +
-  geom_col() +
-  coord_flip() +
-  ggtitle("Number of sightings of each genus") +
-  xlab("Genus") +
-  ylim(c(0, 1800)) +
-  theme(axis.title = element_text(size = 16),
-        plot.title = element_text(size = 20))
-```
 
 
 
-```{r}
-bees %>% group_by(State) %>% summarise(Unique = n_distinct(Genus)) %>%
-  ggplot(aes(reorder(State, Unique, FUN = function(x)sum(x)), Unique)) +
-  geom_col(fill = "#0099FF") +
-  geom_text(aes(label = Unique), size = 6, hjust = -0.1) +
-  coord_flip() +
-  ggtitle("Genus diversity of bees by state") +
-  xlab("State") +
-  ylab("Number of unique genus per state") +
-  ylim(c(0, 34)) +
-  theme(axis.title = element_text(size = 16),
-        plot.title = element_text(size = 20))
-```
 
 # Question: Is the distribution of the number of unique sightings equal over month and state?
 
@@ -258,88 +234,3 @@ state_month_species_count_facetplot <- state_month_species_count %>% drop_na %>%
 state_month_species_count_facetplot
 ```
 
-
-
-```{r}
-species_counts <- bees %>% group_by(Species) %>%
-  summarise(Count = n(),
-            Unique = n_distinct(Species))
-
-species_counts %>% top_n(10, Count) %>% 
-  ggplot(aes(reorder(Species, Count), Count)) +
-  geom_col(fill = "#0099FF")  +
-  geom_text(aes(label = Count, hjust = -0.1)) +
-  coord_flip() +
-  ggtitle("Number of sightings of each species") +
-  xlab("Species") +
-  # ylim(c(0, 1800)) +
-  theme(axis.title = element_text(size = 20),
-        plot.title = element_text(size = 20))
-```
-
-```{r}
-bees %>% group_by(Species, State) %>% summarise(Count = n(),
-                                                Unique = n_distinct(Species))
-```
-
-
-
-```{r}
-bees %>% group_by(State) %>% summarise(Unique = n_distinct(Species)) %>%
-  ggplot(aes(reorder(State, Unique), Unique)) +
-  geom_col(fill = "#0099FF") +
-  coord_flip() +
-  ggtitle("Number of unique species") +
-  xlab("State") +
-  theme(axis.title = element_text(size = 20),
-        plot.title = element_text(size = 20))
-```
-
-```{r}
-bees %>% group_by(State) %>% summarise(Unique = n_distinct(Species)) %>%
-  ggplot(aes(reorder(State, Unique), Unique)) +
-  geom_col() +
-  coord_flip() +
-  ggtitle("Number of unique species") +
-  xlab("State") +
-  theme(axis.title = element_text(size = 20),
-        plot.title = element_text(size = 20))
-```
-
-
-
-
-```{r}
-genus_species_state_habitat <- bees %>% group_by(Genus, Species, State, Habitat) %>% 
-  summarise(Count = n())
-
-genus_species_state_habitat
-```
-
-
-```{r}
-state_month_genus_species <- bees %>% group_by(State, Month, Genus, Species) %>% 
-  summarise(Count = n(),
-            `Num. Unique` = n_distinct(Species))
-
-state_month_genus_species
-```
-
-```{r}
-fig_state_species_month_strong <- state_month_genus_species %>% filter(Species %in% top10_species) %>% drop_na() %>% filter(State %in% strong_states) %>% 
-  ggplot(aes(Month, Count)) +
-  geom_col() +
-  facet_grid(State~Species) +
-  theme_minimal() +
-  ggtitle("Investigating the top ten most recorded species",
-          subtitle = "Across the most prevalent states") +
-  theme(axis.text.x = element_text(angle = 90))
-  
-
-fig_state_species_month_strong
-  
-ggsave(filename = "fig_state_species_month_strong.jpeg",
-       plot = fig_state_species_month_strong,
-       path = here("Assignments", "Assignment3", "figures", "fig_state_species_month_strong.jpeg"),
-       dpi = 300)
-```
