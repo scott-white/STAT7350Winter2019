@@ -224,7 +224,7 @@ plot_density_differences <-  family_size_differences %>%
   ylab("") +
   scale_fill_discrete(name = "Family size",
                        labels = c("Over 4", "4", "3", "2")) +
-  ggtitle("Distributions of differences in total number of families by family size in Winnipeg \n (2001 to 2016)")
+  ggtitle("Distributions of differences in total number of families \n by family size in Winnipeg (2001 to 2016)")
 plot_density_differences
 ```
 
